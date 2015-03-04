@@ -20,9 +20,9 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Start Service"
-                android:id="@+id/startServiceButton"
-                android:onClick="startServicePressed"
+                android:text="Bind service"
+                android:id="@+id/bindServicePressed"
+                android:onClick="bindServicePressed"
                 android:layout_column="0" />
         </TableRow>
 
@@ -53,9 +53,9 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Stop Service"
-                android:id="@+id/stopServiceButton"
-                android:onClick="stopServicePressed"
+                android:text="Unbind Service"
+                android:id="@+id/unbindServicePressed"
+                android:onClick="unbindServicePressed"
                 android:layout_column="0" />
         </TableRow>
     </TableLayout>

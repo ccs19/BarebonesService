@@ -33,6 +33,8 @@
         <service android:exported="true"
             android:label="BarebonesService"
             android:name=".BarebonesService"
+            android:enabled="true"
+
             >
         </service>
     </application>

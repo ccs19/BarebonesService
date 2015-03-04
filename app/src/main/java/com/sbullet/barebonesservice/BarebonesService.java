@@ -27,11 +27,12 @@ public class BarebonesService extends Service {
 
 
     //IBinder for this service
-    private final IBinder m_binder = new MyBinder();
+
 
     public class MyBinder extends Binder
     {
         BarebonesService getService(){
+
             return BarebonesService.this;
         }
     }
@@ -45,20 +46,28 @@ public class BarebonesService extends Service {
         return m_binder;
     }
 
+    private final IBinder m_binder = new MyBinder();
+
 
     @Override
     public void onCreate()
     {
-        super.onCreate();
         m_startTime = getTime();
     }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId)
+    {
+        return START_STICKY; //Persistent service
+    }
+
 
 
     //Clean up any threads, listeners, receivers, etc. when the service ends.
     @Override
     public void onDestroy()
     {
-        Toast.makeText(this, "Service stopped at: " + getTime(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Service unbound at: " + getTime(), Toast.LENGTH_SHORT).show();
     }
 
 

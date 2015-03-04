@@ -17,18 +17,28 @@ import android.widget.Toast;
 
 public class ServiceActivity extends ActionBarActivity {
 
-    private String testString = "asdf";
     private static String TAG = "ServiceActivity";
     private BarebonesService m_barebonesService;
+
+
     private ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName className,
                                        IBinder binder) {
             Log.d(TAG, "onServiceConnection()");
-            BarebonesService.MyBinder b = (BarebonesService.MyBinder) binder;
-            m_barebonesService = b.getService();
-            Toast.makeText(ServiceActivity.this, "Connected", Toast.LENGTH_SHORT).show();
-            testString = "This is a test string";
+            m_barebonesService = ((BarebonesService.MyBinder)binder).getService();
+
+            if(m_barebonesService != null) {
+                Toast.makeText(ServiceActivity.this, "Connected", Toast.LENGTH_SHORT).show();
+                //Get service start time and set text box
+                TextView startTime = (TextView) findViewById(R.id.start_time);
+                startTime.setText(m_barebonesService.getStartTime());
+            }
+            else
+            {
+                Toast.makeText(ServiceActivity.this, "Cannot connect to service", Toast.LENGTH_SHORT).show();
+            }
+
         }
 
         public void onServiceDisconnected(ComponentName className) {
@@ -39,21 +49,23 @@ public class ServiceActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service);
-
     }
 
 
     @Override
     protected void onResume()
     {
+        Log.d(TAG, "onResume()");
         super.onResume();
     }
 
     @Override
     protected void onPause()
     {
+        Log.d(TAG, "onPause()");
         super.onPause();
         unbindService(mConnection);
     }
@@ -62,6 +74,7 @@ public class ServiceActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
+        Log.d(TAG, "onCreateOptionsMenu()");
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_, menu);
         return true;
@@ -70,6 +83,7 @@ public class ServiceActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        Log.d(TAG, "onOptionsItemSelected()");
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -83,19 +97,17 @@ public class ServiceActivity extends ActionBarActivity {
     }
 
 
-    public void startServicePressed(View view)
+    public void bindServicePressed(View view)
     {
-        Intent intent = new Intent(this, BarebonesService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-        Toast.makeText(ServiceActivity.this, testString, Toast.LENGTH_SHORT).show();
-        //Get service start time and set text box
-        TextView startTime = (TextView) findViewById(R.id.start_time);
-        startTime.setText(m_barebonesService.getStartTime());
+        Log.d(TAG, "bindServicePressed()");
+        bindService(new Intent(ServiceActivity.this, BarebonesService.class), mConnection, Context.BIND_AUTO_CREATE);
     }
 
-    public void stopServicePressed(View view)
+    public void unbindServicePressed(View view)
     {
-        m_barebonesService.stopService(new Intent(this, BarebonesService.class));
+        Log.d(TAG, "unbindServicePressed()");
+        unbindService(mConnection);
+
     }
 
 
